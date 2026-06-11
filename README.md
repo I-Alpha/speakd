@@ -1,13 +1,15 @@
 # speakd
 
-**Fire-and-forget local TTS narration for long-running work.**
+**A local text-to-speech daemon and CLI for speech notifications from
+long-running jobs.**
 
-`speakd` is a small Unix daemon that turns text lines into speech with
-[Kokoro](https://github.com/hexgrad/kokoro) (a fast, high-quality local TTS
-model). Any process — a training run, a build, a cron job, a shell one-liner —
-sends a line to a Unix socket and moves on; the daemon queues, synthesizes,
-and plays it. If anything in the audio stack fails, the line degrades to
-espeak instead of disappearing.
+`speakd` is a Python TTS daemon powered by
+[Kokoro](https://github.com/hexgrad/kokoro) (a fast, high-quality local
+text-to-speech model). Shell scripts, machine-learning training runs, builds,
+cron jobs, CI hooks, and Python programs can send fire-and-forget speech
+notifications over a Unix socket; the caller returns in about a millisecond
+while the daemon queues, synthesizes, and plays each line in order. If anything
+in the audio stack fails, the line degrades to espeak instead of disappearing.
 
 It was built to narrate machine-learning training runs on a single-GPU
 workstation, which shaped its defining feature: **the TTS model dynamically
@@ -20,6 +22,17 @@ $ speak "training started"          # daemon auto-spawns on first use
 $ speak --interrupt "loss is NaN"   # cuts off whatever is playing, speaks NOW
 $ make 2>&1 | tail -1 | speak       # pipe-friendly
 ```
+
+## Use cases
+
+- Add voice alerts to machine-learning training runs when epochs finish,
+  checkpoints save, loss becomes NaN, or jobs crash.
+- Turn shell scripts, Makefiles, cron jobs, and CI hooks into spoken status
+  updates.
+- Use Kokoro TTS locally without blocking the process that asked for speech.
+- Share one text-to-speech queue across multiple processes so messages do not
+  overlap.
+- Release GPU VRAM after narration bursts with dynamic CPU/GPU offload.
 
 ## Why a daemon?
 
