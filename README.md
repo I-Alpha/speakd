@@ -1,5 +1,8 @@
 # speakd
 
+[![PyPI](https://img.shields.io/pypi/v/speakd)](https://pypi.org/project/speakd/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/speakd)](https://pypi.org/project/speakd/)
+
 **A local text-to-speech daemon and CLI for speech notifications from
 long-running jobs.**
 
@@ -17,7 +20,7 @@ offloads itself from the GPU** when narration goes quiet, so it never holds
 VRAM hostage from the workload it is narrating.
 
 ```
-$ pip install .
+$ pip install speakd
 $ speak "training started"          # daemon auto-spawns on first use
 $ speak --interrupt "loss is NaN"   # cuts off whatever is playing, speaks NOW
 $ make 2>&1 | tail -1 | speak       # pipe-friendly
@@ -103,12 +106,18 @@ process, and overlapping lines talk over each other. `speakd` inverts this:
 ## Install
 
 ```bash
-git clone <this-repo> && cd speakd
-pip install .
+pip install speakd
 ```
 
 This installs the `kokoro` TTS package (which pulls in PyTorch) and two
 console commands: `speakd` (the daemon) and `speak` (the client).
+
+To install from source:
+
+```bash
+git clone https://github.com/I-Alpha/speakd && cd speakd
+pip install .
+```
 
 ## Quickstart
 
